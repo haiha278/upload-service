@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/blog-collection/media")
 public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<ResponseDTO<String>> uploadFile(@RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload-avatar")
+    public ResponseEntity<ResponseDTO<String>> uploadAvatar(@RequestParam("file") MultipartFile file) {
         try {
             String fileUrl = uploadService.uploadMedia(file);
             return new ResponseEntity<>(ResponseDTO.<String>builder()
@@ -34,4 +36,23 @@ public class UploadController {
                     .build(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/post/upload")
+    public ResponseEntity<ResponseDTO<Object>> uploadMultipleFilesForPost(@RequestParam("files") List<MultipartFile> files) {
+        try {
+            List<String> fileUrls = uploadService.uploadMultipleFiles(files);
+            return new ResponseEntity<>(ResponseDTO.<Object>builder()
+                    .responseCode(HttpStatus.OK.value())
+                    .responseMessage("Uploaded Successfully")
+                    .responseData(fileUrls)
+                    .build(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ResponseDTO.<Object>builder()
+                    .responseCode(HttpStatus.BAD_REQUEST.value())
+                    .responseMessage("Upload Failed: " + e.getMessage())
+                    .responseData(null)
+                    .build(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
