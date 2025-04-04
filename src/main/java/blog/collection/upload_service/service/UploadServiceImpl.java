@@ -1,13 +1,11 @@
 package blog.collection.upload_service.service;
 
-import blog.collection.upload_service.config.CloudinaryConfig;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,9 +17,9 @@ public class UploadServiceImpl implements UploadService {
     private Cloudinary cloudinary;
 
     @Override
-    public String uploadMedia(MultipartFile multipartFile) throws Exception {
+    public String uploadMedia(byte[] dataContent) throws Exception {
         try {
-            Map uploadResult = cloudinary.uploader().upload(multipartFile.getBytes(), ObjectUtils.asMap("resource_type", "auto", "folder", "avatar_uploads"));
+            Map uploadResult = cloudinary.uploader().upload(dataContent, ObjectUtils.asMap("resource_type", "auto", "folder", "avatar_uploads"));
             return uploadResult.get("secure_url").toString();
         } catch (Exception e) {
             throw new Exception("Failed to upload");

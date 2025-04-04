@@ -5,10 +5,7 @@ import blog.collection.upload_service.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,9 +17,9 @@ public class UploadController {
     private UploadService uploadService;
 
     @PostMapping("/upload-avatar")
-    public ResponseEntity<ResponseDTO<String>> uploadAvatar(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ResponseDTO<String>> uploadAvatar(@RequestBody byte[] uploadData) {
         try {
-            String fileUrl = uploadService.uploadMedia(file);
+            String fileUrl = uploadService.uploadMedia(uploadData);
             return new ResponseEntity<>(ResponseDTO.<String>builder()
                     .responseCode(HttpStatus.OK.value())
                     .responseMessage("Upload Successfully")

@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface UploadService {
-    String uploadMedia(MultipartFile multipartFile) throws Exception;
+
+    String uploadMedia(byte[] dataContent) throws Exception;
 
     List<String> uploadMultipleFiles(List<MultipartFile> files);
 }
